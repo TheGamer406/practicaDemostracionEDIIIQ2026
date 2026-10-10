@@ -14,9 +14,14 @@
 </script>
 </head>
 <body>
-<div class="layout">
   <header class="topbar">
-    <h1>Motor de reglas optimizadoras — Feature Flags</h1>
+    <div class="marca">
+      <span class="marca-icono">🧩</span>
+      <div>
+        <h1>Motor de reglas optimizadoras</h1>
+        <p class="subtitulo">Feature Flags · Matemática Discreta</p>
+      </div>
+    </div>
     <div class="controles-globales">
       <label for="velocidad" class="solo-pantalla">Velocidad</label>
       <select id="velocidad">
@@ -24,40 +29,37 @@
         <option value="normal" selected>Normal</option>
         <option value="rapido">Rápido</option>
       </select>
-      <button id="btn-ejecutar-todo" class="primario">Ejecutar todo</button>
+      <button id="btn-ejecutar-todo" class="primario">▶ Ejecutar todo</button>
       <button id="toggle-tema" aria-label="Cambiar a tema oscuro" aria-pressed="false">🌙</button>
     </div>
   </header>
 
-  <nav class="lateral" aria-label="Secciones del documento">
-    <ol>
-      <li><a href="#s1">1. Contexto y problema</a></li>
-      <li><a href="#s2">2. Código legacy</a></li>
-      <li><a href="#s3">3. Tabla de verdad</a></li>
-      <li><a href="#s4">4. Demostración</a></li>
-      <li><a href="#s5">5. Interpretación</a></li>
-      <li><a href="#s6">6. Código optimizado</a></li>
-      <li><a href="#s7">7. Validación</a></li>
-      <li><a href="#s8">8. Comparación</a></li>
-      <li><a href="#s9">9. Conclusiones</a></li>
-      <li><a href="#s10">10. Cómo ejecutar</a></li>
-    </ol>
+  <nav class="pills" aria-label="Secciones del documento">
+    <a href="#s1">🧭 Contexto</a>
+    <a href="#s2">🗄️ Legacy</a>
+    <a href="#s3">📊 Tabla</a>
+    <a href="#s4">🧮 Demostración</a>
+    <a href="#s5">💡 Interpretación</a>
+    <a href="#s6">⚡ Optimizado</a>
+    <a href="#s7">✅ Validación</a>
+    <a href="#s8">⚖️ Comparación</a>
+    <a href="#s9">🏁 Conclusiones</a>
   </nav>
 
   <main>
 
   <section id="s1" class="seccion">
-    <h2>1. Contexto y problema</h2>
+    <h2><span class="num-badge">1</span> Contexto y problema</h2>
     <p>
       El sistema controla el acceso a una funcionalidad mediante <strong>Feature Flags</strong>: en vez de
       activar una función para todos los usuarios a la vez, se decide quién la ve según sus atributos.
       Se definen tres proposiciones:
     </p>
-    <ul>
-      <li><strong>A</strong>: el usuario es <em>Administrador</em>.</li>
-      <li><strong>B</strong>: el usuario tiene plan <em>Premium</em>.</li>
-      <li><strong>C</strong>: la funcionalidad está habilitada en <em>Beta global</em>.</li>
-    </ul>
+    <div class="grid-atributos">
+      <div class="tarjeta atributo"><strong>A</strong><span>Administrador</span></div>
+      <div class="tarjeta atributo"><strong>B</strong><span>Premium</span></div>
+      <div class="tarjeta atributo"><strong>C</strong><span>Beta global</span></div>
+    </div>
     <p>
       El código legacy decide el acceso con tres condiciones (<code>opcion_1</code>, <code>opcion_2</code>,
       <code>opcion_3</code>) encadenadas con <code>or</code>. El objetivo de este documento es
@@ -67,7 +69,7 @@
   </section>
 
   <section id="s2" class="seccion">
-    <h2>2. Código legacy</h2>
+    <h2><span class="num-badge">2</span> Código legacy</h2>
     <p>
       Tres caminos posibles dan acceso, todos exigen que la funcionalidad esté en Beta global (<code>C</code>):
     </p>
@@ -77,7 +79,7 @@
       <li><code>opcion_3</code>: es Administrador y no Premium (y C).</li>
     </ul>
     <p>En notación lógica, la función de acceso es:</p>
-    <p class="tarjeta" style="font-size:1.05rem; text-align:center;">
+    <p class="tarjeta formula">
       f(A,B,C) = (¬A ∧ B ∧ C) ∨ (A ∧ B ∧ C) ∨ (A ∧ ¬B ∧ C)
     </p>
     <div class="tarjeta">
@@ -86,41 +88,54 @@
   </section>
 
   <section id="s3" class="seccion">
-    <h2>3. Tabla de verdad del legacy (en vivo)</h2>
+    <h2><span class="num-badge">3</span> Tabla de verdad del legacy (en vivo)</h2>
     <p>
       Los datos de esta tabla <strong>no están precalculados</strong>: llegan fila por fila desde el backend
-      por <em>Server-Sent Events</em>, ejecutando <code>evaluar_acceso_legacy</code> en tiempo real.
+      por <em>Server-Sent Events</em>, ejecutando <code>evaluar_acceso_legacy</code> en tiempo real. El código
+      queda a la vista, al lado del resultado, mientras corre.
     </p>
-    <div class="tarjeta">
-      <div class="estado-conexion" data-stream="tabla"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
-      <button data-repetir="tabla">Repetir</button>
-      <table id="tabla-legacy">
-        <thead>
-          <tr><th>#</th><th>A</th><th>B</th><th>C</th><th>opcion_1</th><th>opcion_2</th><th>opcion_3</th><th>legacy</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <p id="conclusion-tabla" class="texto-suave"></p>
+    <div class="vivo">
+      <div class="tarjeta panel-codigo">
+        <h3 class="panel-titulo">Código ejecutándose</h3>
+        <pre class="bloque-codigo" id="codigo-legacy-vivo" data-lang="python">Cargando código fuente…</pre>
+      </div>
+      <div class="tarjeta">
+        <div class="estado-conexion" data-stream="tabla"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
+        <button data-repetir="tabla">↻ Repetir</button>
+        <table id="tabla-legacy">
+          <thead>
+            <tr><th>#</th><th>A</th><th>B</th><th>C</th><th>opcion_1</th><th>opcion_2</th><th>opcion_3</th><th>legacy</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p id="conclusion-tabla" class="texto-suave"></p>
+      </div>
     </div>
   </section>
 
   <section id="s4" class="seccion">
-    <h2>4. Demostración de la simplificación (en vivo)</h2>
+    <h2><span class="num-badge">4</span> Demostración de la simplificación (en vivo)</h2>
     <p>
-      Cada fila de la tabla siguiente es un paso algebraico. El backend evalúa la función de cada paso en las
+      Cada fila de la tabla es un paso algebraico. El backend evalúa la función de cada paso en las
       8 combinaciones de A, B, C y comprueba que coincide con la función original: así se prueba
       <strong>computacionalmente</strong> que cada transformación preserva el significado.
     </p>
-    <div class="tarjeta">
-      <div class="estado-conexion" data-stream="demostracion"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
-      <button data-repetir="demostracion">Repetir</button>
-      <table id="tabla-demostracion">
-        <thead>
-          <tr><th>n</th><th>Expresión</th><th>Ley</th><th>000</th><th>001</th><th>010</th><th>011</th><th>100</th><th>101</th><th>110</th><th>111</th><th>✔</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <p id="resultado-demostracion" class="texto-suave"></p>
+    <div class="vivo">
+      <div class="tarjeta panel-codigo">
+        <h3 class="panel-titulo">Transformación paso a paso</h3>
+        <pre class="bloque-codigo" id="transcript-demostracion">Esperando el primer paso…</pre>
+      </div>
+      <div class="tarjeta">
+        <div class="estado-conexion" data-stream="demostracion"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
+        <button data-repetir="demostracion">↻ Repetir</button>
+        <table id="tabla-demostracion">
+          <thead>
+            <tr><th>n</th><th>Expresión</th><th>Ley</th><th>000</th><th>001</th><th>010</th><th>011</th><th>100</th><th>101</th><th>110</th><th>111</th><th>✔</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p id="resultado-demostracion" class="texto-suave"></p>
+      </div>
     </div>
     <div class="tarjeta">
       <h3>Leyes usadas</h3>
@@ -135,7 +150,7 @@
   </section>
 
   <section id="s5" class="seccion">
-    <h2>5. Interpretación</h2>
+    <h2><span class="num-badge">5</span> Interpretación</h2>
     <p>
       La forma final <strong>C ∧ (A ∨ B)</strong> dice, en palabras: <em>"tiene acceso quien tiene la
       funcionalidad habilitada en Beta global (C), y además es Administrador o es Premium (A ∨ B)"</em>.
@@ -146,7 +161,7 @@
   </section>
 
   <section id="s6" class="seccion">
-    <h2>6. Código optimizado</h2>
+    <h2><span class="num-badge">6</span> Código optimizado</h2>
     <p>Esta función sale directamente del último paso de la demostración (sección 4):</p>
     <div class="tarjeta">
       <pre class="bloque-codigo" id="codigo-optimizado" data-lang="python">Cargando código fuente…</pre>
@@ -154,27 +169,33 @@
   </section>
 
   <section id="s7" class="seccion">
-    <h2>7. Validación (en vivo)</h2>
+    <h2><span class="num-badge">7</span> Validación (en vivo)</h2>
     <p>
       Se recorren las 8 combinaciones de A, B, C comparando <code>evaluar_acceso_legacy</code> contra
       <code>evaluar_acceso_optimizado</code>, y al final se ejecuta de verdad el <code>assert</code> de
-      equivalencia.
+      equivalencia. Ambas funciones se muestran al lado del resultado mientras se validan.
     </p>
-    <div class="tarjeta">
-      <div class="estado-conexion" data-stream="validacion"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
-      <button data-repetir="validacion">Repetir</button>
-      <div class="barra-progreso"><div id="barra-validacion"></div></div>
-      <p id="contador-validacion">0/8</p>
-      <table id="tabla-validacion">
-        <thead><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>legacy</th><th>optimizado</th><th>coincide</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <p id="resultado-assert"></p>
+    <div class="vivo">
+      <div class="tarjeta panel-codigo">
+        <h3 class="panel-titulo">Código comparado</h3>
+        <pre class="bloque-codigo" id="codigo-optimizado-vivo" data-lang="python">Cargando código fuente…</pre>
+      </div>
+      <div class="tarjeta">
+        <div class="estado-conexion" data-stream="validacion"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
+        <button data-repetir="validacion">↻ Repetir</button>
+        <div class="barra-progreso"><div id="barra-validacion"></div></div>
+        <p id="contador-validacion">0/8</p>
+        <table id="tabla-validacion">
+          <thead><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>legacy</th><th>optimizado</th><th>coincide</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p id="resultado-assert"></p>
+      </div>
     </div>
   </section>
 
   <section id="s8" class="seccion">
-    <h2>8. Comparación viejo vs nuevo</h2>
+    <h2><span class="num-badge">8</span> Comparación viejo vs nuevo</h2>
     <div class="tarjeta" id="comparacion-resumen">Cargando comparación…</div>
     <div class="tarjeta">
       <h3>Diagrama de compuertas</h3>
@@ -216,7 +237,7 @@
   </section>
 
   <section id="s9" class="seccion">
-    <h2>9. Conclusiones</h2>
+    <h2><span class="num-badge">9</span> Conclusiones</h2>
     <ul>
       <li>Se demostró, ley por ley, que <code>(¬A∧B∧C)∨(A∧B∧C)∨(A∧¬B∧C) ≡ C∧(A∨B)</code>.</li>
       <li>Cada uno de los 9 pasos se verificó computacionalmente contra las 8 combinaciones posibles.</li>
@@ -226,21 +247,11 @@
     </ul>
   </section>
 
-  <section id="s10" class="seccion">
-    <h2>10. Cómo ejecutar</h2>
-    <p>Con Docker (recomendado):</p>
-    <pre class="bloque-codigo">docker compose up --build
-# abrir http://localhost:8000</pre>
-    <p>Script de consola, sin dependencias:</p>
-    <pre class="bloque-codigo">python3 script_standalone.py</pre>
-  </section>
-
   <footer class="print-only">
     <p>Documento generado por el motor de reglas optimizadoras. Impreso desde el navegador.</p>
   </footer>
 
   </main>
-</div>
 
 <script src="/static/app.js"></script>
 </body>

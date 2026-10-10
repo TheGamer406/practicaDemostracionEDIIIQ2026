@@ -34,12 +34,19 @@
       .replace(/\bdef (\w+)/g, 'def <span class="tok-fn">$1</span>');
   }
 
+  function ponerCodigo(id, codigo) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = resaltarPython(codigo);
+  }
+
   async function cargarCodigo() {
     try {
       const resp = await fetch("/api/codigo");
       const datos = await resp.json();
-      document.getElementById("codigo-legacy").innerHTML = resaltarPython(datos.legacy);
-      document.getElementById("codigo-optimizado").innerHTML = resaltarPython(datos.optimizado);
+      ponerCodigo("codigo-legacy", datos.legacy);
+      ponerCodigo("codigo-legacy-vivo", datos.legacy);
+      ponerCodigo("codigo-optimizado", datos.optimizado);
+      ponerCodigo("codigo-optimizado-vivo", datos.legacy + "\n" + datos.optimizado);
     } catch (e) {
       document.getElementById("codigo-legacy").textContent = "No se pudo cargar el código.";
     }
@@ -155,6 +162,7 @@
 
   // ---------- Sección 4: demostración ----------
   const cuerpoDemo = document.querySelector("#tabla-demostracion tbody");
+  const transcriptDemo = document.getElementById("transcript-demostracion");
   function pintarFilaDemo(p) {
     const tr = document.createElement("tr");
     const bits = p.columna.map(b => `<td class="bit bit-${b}">${b}</td>`).join("");
@@ -162,6 +170,12 @@
       ${bits}<td>${p.igual_a_original ? '<span class="pill pill-ok">✔</span>' : '<span class="pill pill-fail">✘</span>'}</td>`;
     if (!p.igual_a_original) tr.classList.add("fila-fail");
     cuerpoDemo.appendChild(tr);
+
+    const bloque = document.createElement("span");
+    bloque.className = "paso-transcript";
+    bloque.innerHTML = `<span class="tok-com"># paso ${p.n} — ${p.ley}</span>${p.expr}`;
+    transcriptDemo.appendChild(bloque);
+    transcriptDemo.scrollTop = transcriptDemo.scrollHeight;
   }
   const streamDemo = crearStream("demostracion", pintarFilaDemo, (fin) => {
     const el = document.getElementById("resultado-demostracion");
@@ -172,6 +186,7 @@
 
   function repetirDemo() {
     cuerpoDemo.innerHTML = "";
+    transcriptDemo.innerHTML = "";
     document.getElementById("resultado-demostracion").innerHTML = "";
     streamDemo.conectar();
   }
@@ -229,7 +244,7 @@
   });
 
   // ---------- Navegación activa ----------
-  const enlaces = Array.from(document.querySelectorAll("nav.lateral a"));
+  const enlaces = Array.from(document.querySelectorAll("nav.pills a"));
   const secciones = enlaces.map(a => document.querySelector(a.getAttribute("href")));
   const observador = new IntersectionObserver((entradas) => {
     entradas.forEach(e => {
