@@ -14,37 +14,39 @@
 </script>
 </head>
 <body>
-  <header class="topbar">
-    <div class="marca">
-      <span class="marca-icono">🧩</span>
-      <div>
-        <h1>Motor de reglas optimizadoras</h1>
-        <p class="subtitulo">Feature Flags · Matemática Discreta</p>
+  <div class="barra-superior">
+    <header class="topbar">
+      <div class="marca">
+        <span class="marca-icono">🧩</span>
+        <div>
+          <h1>Motor de reglas optimizadoras</h1>
+          <p class="subtitulo">Feature Flags · Matemática Discreta</p>
+        </div>
       </div>
-    </div>
-    <div class="controles-globales">
-      <label for="velocidad" class="solo-pantalla">Velocidad</label>
-      <select id="velocidad">
-        <option value="lento">Lento</option>
-        <option value="normal" selected>Normal</option>
-        <option value="rapido">Rápido</option>
-      </select>
-      <button id="btn-ejecutar-todo" class="primario">▶ Ejecutar todo</button>
-      <button id="toggle-tema" aria-label="Cambiar a tema oscuro" aria-pressed="false">🌙</button>
-    </div>
-  </header>
+      <div class="controles-globales">
+        <label for="velocidad" class="solo-pantalla">Velocidad</label>
+        <select id="velocidad">
+          <option value="lento">Lento</option>
+          <option value="normal" selected>Normal</option>
+          <option value="rapido">Rápido</option>
+        </select>
+        <button id="btn-ejecutar-todo" class="primario">▶ Ejecutar todo</button>
+        <button id="toggle-tema" aria-label="Cambiar a tema oscuro" aria-pressed="false">🌙</button>
+      </div>
+    </header>
 
-  <nav class="pills" aria-label="Secciones del documento">
-    <a href="#s1">🧭 Contexto</a>
-    <a href="#s2">🗄️ Legacy</a>
-    <a href="#s3">📊 Tabla</a>
-    <a href="#s4">🧮 Demostración</a>
-    <a href="#s5">💡 Interpretación</a>
-    <a href="#s6">⚡ Optimizado</a>
-    <a href="#s7">✅ Validación</a>
-    <a href="#s8">⚖️ Comparación</a>
-    <a href="#s9">🏁 Conclusiones</a>
-  </nav>
+    <nav class="pills" aria-label="Secciones del documento">
+      <a href="#s1">🧭 Contexto</a>
+      <a href="#s2">🗄️ Legacy</a>
+      <a href="#s3">📊 Tabla</a>
+      <a href="#s4">🧮 Demostración</a>
+      <a href="#s5">💡 Interpretación</a>
+      <a href="#s6">⚡ Optimizado</a>
+      <a href="#s7">✅ Validación</a>
+      <a href="#s8">⚖️ Comparación</a>
+      <a href="#s9">🏁 Conclusiones</a>
+    </nav>
+  </div>
 
   <main>
 
@@ -102,12 +104,14 @@
       <div class="tarjeta">
         <div class="estado-conexion" data-stream="tabla"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
         <button data-repetir="tabla">↻ Repetir</button>
-        <table id="tabla-legacy">
-          <thead>
-            <tr><th>#</th><th>A</th><th>B</th><th>C</th><th>opcion_1</th><th>opcion_2</th><th>opcion_3</th><th>legacy</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="tabla-scroll">
+          <table id="tabla-legacy">
+            <thead>
+              <tr><th>#</th><th>A</th><th>B</th><th>C</th><th>opcion_1</th><th>opcion_2</th><th>opcion_3</th><th>legacy</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
         <p id="conclusion-tabla" class="texto-suave"></p>
       </div>
     </div>
@@ -128,12 +132,14 @@
       <div class="tarjeta">
         <div class="estado-conexion" data-stream="demostracion"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
         <button data-repetir="demostracion">↻ Repetir</button>
-        <table id="tabla-demostracion">
-          <thead>
-            <tr><th>n</th><th>Expresión</th><th>Ley</th><th>000</th><th>001</th><th>010</th><th>011</th><th>100</th><th>101</th><th>110</th><th>111</th><th>✔</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="tabla-scroll">
+          <table id="tabla-demostracion">
+            <thead>
+              <tr><th>n</th><th>Expresión</th><th>Ley</th><th>000</th><th>001</th><th>010</th><th>011</th><th>100</th><th>101</th><th>110</th><th>111</th><th>✔</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
         <p id="resultado-demostracion" class="texto-suave"></p>
       </div>
     </div>
@@ -185,10 +191,12 @@
         <button data-repetir="validacion">↻ Repetir</button>
         <div class="barra-progreso"><div id="barra-validacion"></div></div>
         <p id="contador-validacion">0/8</p>
-        <table id="tabla-validacion">
-          <thead><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>legacy</th><th>optimizado</th><th>coincide</th></tr></thead>
-          <tbody></tbody>
-        </table>
+        <div class="tabla-scroll">
+          <table id="tabla-validacion">
+            <thead><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>legacy</th><th>optimizado</th><th>coincide</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
         <p id="resultado-assert"></p>
       </div>
     </div>

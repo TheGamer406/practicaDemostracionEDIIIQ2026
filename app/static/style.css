@@ -65,6 +65,14 @@ code, pre {
   font-family: "SF Mono", "Fira Code", Consolas, monospace;
 }
 
+/* ---------- Barra superior (header + nav juntos y sticky) ---------- */
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: var(--sombra);
+}
+
 /* ---------- Header ---------- */
 header.topbar {
   display: flex;
@@ -75,9 +83,6 @@ header.topbar {
   padding: 0.9rem 1.5rem;
   background: linear-gradient(135deg, var(--acento), var(--acento-2));
   color: var(--acento-texto);
-  position: sticky;
-  top: 0;
-  z-index: 30;
 }
 
 .marca {
@@ -157,9 +162,6 @@ nav.pills {
   padding: 0.6rem 1.5rem;
   background: var(--bg-elevado);
   border-bottom: 1px solid var(--borde);
-  position: sticky;
-  top: 62px;
-  z-index: 20;
   scrollbar-width: thin;
 }
 
@@ -185,7 +187,7 @@ main {
 
 section.seccion {
   margin-bottom: 3.5rem;
-  scroll-margin-top: 130px;
+  scroll-margin-top: calc(var(--barra-h, 120px) + 12px);
 }
 
 section.seccion h2 {
@@ -250,14 +252,24 @@ section.seccion h2 {
 /* ---------- Panel código | resultado en vivo ---------- */
 .vivo {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(320px, 1.35fr);
+  grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.4fr);
   gap: 1.1rem;
   align-items: start;
 }
 
+/* min-width:0 evita que el contenido ancho (tablas) desborde el track del grid */
+.vivo > * { min-width: 0; }
+
 .panel-codigo {
   position: sticky;
-  top: 140px;
+  top: calc(var(--barra-h, 120px) + 12px);
+}
+
+/* las tablas anchas hacen scroll dentro de su tarjeta, no desbordan */
+.tabla-scroll {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .panel-titulo {

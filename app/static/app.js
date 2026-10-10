@@ -76,10 +76,12 @@
            Optimizado: ${d.benchmark.segundos_optimizado.toFixed(4)} s</p>
         <p class="texto-suave">${d.benchmark.nota}</p>
         <h3>Tabla lado a lado</h3>
-        <table>
-          <thead><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>legacy</th><th>optimizado</th><th>coincide</th></tr></thead>
-          <tbody>${filas}</tbody>
-        </table>`;
+        <div class="tabla-scroll">
+          <table>
+            <thead><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>legacy</th><th>optimizado</th><th>coincide</th></tr></thead>
+            <tbody>${filas}</tbody>
+          </table>
+        </div>`;
     } catch (e) {
       cont.textContent = "No se pudo cargar la comparación.";
     }
@@ -256,6 +258,17 @@
     });
   }, { rootMargin: "-20% 0px -70% 0px" });
   secciones.forEach(s => s && observador.observe(s));
+
+  // ---------- Altura real de la barra superior (header + nav) ----------
+  const barra = document.querySelector(".barra-superior");
+  function actualizarAltoBarra() {
+    if (barra) root.style.setProperty("--barra-h", `${barra.offsetHeight}px`);
+  }
+  actualizarAltoBarra();
+  window.addEventListener("resize", actualizarAltoBarra);
+  if (window.ResizeObserver && barra) {
+    new ResizeObserver(actualizarAltoBarra).observe(barra);
+  }
 
   // ---------- Arranque ----------
   cargarCodigo();
