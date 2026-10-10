@@ -1,0 +1,303 @@
+:root {
+  --bg: #f7f7fa;
+  --bg-elevado: #ffffff;
+  --texto: #1b1e24;
+  --texto-suave: #52596b;
+  --borde: #d9dce3;
+  --acento: #3454d1;
+  --acento-texto: #ffffff;
+  --ok-bg: #e4f6e9;
+  --ok-texto: #126b2b;
+  --fail-bg: #fdeaea;
+  --fail-texto: #9d1414;
+  --code-bg: #eef0f5;
+  --sombra: 0 1px 3px rgba(20, 20, 30, 0.08);
+  --kw: #a626a4;
+  --str: #50a14f;
+  --com: #8b94a3;
+  --num: #986801;
+  --fn: #4078f2;
+}
+
+:root[data-theme="dark"] {
+  --bg: #11131a;
+  --bg-elevado: #191c26;
+  --texto: #e7e9f0;
+  --texto-suave: #a3abc2;
+  --borde: #2d3142;
+  --acento: #7c9bff;
+  --acento-texto: #0d1020;
+  --ok-bg: #0f3321;
+  --ok-texto: #7fe3a4;
+  --fail-bg: #3a1414;
+  --fail-texto: #ff9b9b;
+  --code-bg: #141722;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --kw: #c678dd;
+  --str: #98c379;
+  --com: #7f8799;
+  --num: #d19a66;
+  --fn: #61afef;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--texto);
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+
+a { color: var(--acento); }
+
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+header.topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--borde);
+  background: var(--bg-elevado);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+header.topbar h1 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.controles-globales {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--borde);
+  background: var(--bg-elevado);
+  color: var(--texto);
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+}
+
+button.primario {
+  background: var(--acento);
+  color: var(--acento-texto);
+  border-color: var(--acento);
+}
+
+button:hover { filter: brightness(1.05); }
+button:focus-visible, a:focus-visible, select:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+}
+
+#toggle-tema {
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.45rem 0.6rem;
+}
+
+select {
+  font: inherit;
+  background: var(--bg-elevado);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+}
+
+nav.lateral {
+  border-right: 1px solid var(--borde);
+  background: var(--bg-elevado);
+  padding: 1rem 0.5rem;
+  position: sticky;
+  top: 57px;
+  align-self: start;
+  height: calc(100vh - 57px);
+  overflow-y: auto;
+}
+
+nav.lateral ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+nav.lateral a {
+  display: block;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+}
+
+nav.lateral a:hover, nav.lateral a.activo {
+  background: var(--code-bg);
+  color: var(--texto);
+}
+
+main {
+  padding: 1.5rem 2rem 4rem;
+  max-width: 920px;
+}
+
+section.seccion {
+  margin-bottom: 3rem;
+  scroll-margin-top: 70px;
+}
+
+section.seccion h2 {
+  border-bottom: 2px solid var(--borde);
+  padding-bottom: 0.4rem;
+}
+
+.tarjeta {
+  background: var(--bg-elevado);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--sombra);
+  margin: 1rem 0;
+}
+
+code, pre {
+  font-family: "SF Mono", "Fira Code", Consolas, monospace;
+}
+
+pre.bloque-codigo {
+  background: var(--code-bg);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.88rem;
+}
+
+.tok-kw { color: var(--kw); font-weight: 600; }
+.tok-str { color: var(--str); }
+.tok-com { color: var(--com); font-style: italic; }
+.tok-num { color: var(--num); }
+.tok-fn { color: var(--fn); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th, td {
+  border: 1px solid var(--borde);
+  padding: 0.35rem 0.55rem;
+  text-align: center;
+}
+
+th { background: var(--code-bg); }
+
+.fila-ok { background: var(--ok-bg); color: var(--ok-texto); }
+.fila-fail { background: var(--fail-bg); color: var(--fail-texto); }
+
+.bit { font-weight: 700; }
+.bit-1 { color: var(--ok-texto); }
+.bit-0 { color: var(--texto-suave); }
+
+.pill {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.pill-ok { background: var(--ok-bg); color: var(--ok-texto); }
+.pill-fail { background: var(--fail-bg); color: var(--fail-texto); }
+
+.barra-progreso {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--code-bg);
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.barra-progreso > div {
+  height: 100%;
+  background: var(--acento);
+  width: 0%;
+  transition: width 0.25s ease;
+}
+
+.estado-conexion {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.punto {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--texto-suave);
+  display: inline-block;
+}
+
+.punto.activo { background: var(--ok-texto); }
+.punto.error { background: var(--fail-texto); }
+
+.paso-ley {
+  font-weight: 700;
+  color: var(--acento);
+}
+
+svg.compuertas text {
+  fill: currentColor;
+  font-size: 11px;
+  font-family: inherit;
+}
+
+svg.compuertas path, svg.compuertas line, svg.compuertas rect, svg.compuertas circle {
+  stroke: currentColor;
+  fill: none;
+}
+
+footer.print-only { display: none; }
+
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  nav.lateral {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--borde);
+  }
+  main { padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra-progreso > div { transition: none; }
+}
+
+@media print {
+  nav.lateral, header.topbar .controles-globales, .solo-pantalla { display: none; }
+  body { background: #fff; color: #000; }
+  a { color: #000; }
+}

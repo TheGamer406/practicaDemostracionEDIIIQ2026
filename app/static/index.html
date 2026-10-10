@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motor de reglas optimizadoras — demostración en vivo</title>
+<link rel="stylesheet" href="/static/style.css">
+<script>
+  (function () {
+    var guardado = localStorage.getItem("tema");
+    var tema = guardado || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", tema);
+  })();
+</script>
+</head>
+<body>
+<div class="layout">
+  <header class="topbar">
+    <h1>Motor de reglas optimizadoras — Feature Flags</h1>
+    <div class="controles-globales">
+      <label for="velocidad" class="solo-pantalla">Velocidad</label>
+      <select id="velocidad">
+        <option value="lento">Lento</option>
+        <option value="normal" selected>Normal</option>
+        <option value="rapido">Rápido</option>
+      </select>
+      <button id="btn-ejecutar-todo" class="primario">Ejecutar todo</button>
+      <button id="toggle-tema" aria-label="Cambiar a tema oscuro" aria-pressed="false">🌙</button>
+    </div>
+  </header>
+
+  <nav class="lateral" aria-label="Secciones del documento">
+    <ol>
+      <li><a href="#s1">1. Contexto y problema</a></li>
+      <li><a href="#s2">2. Código legacy</a></li>
+      <li><a href="#s3">3. Tabla de verdad</a></li>
+      <li><a href="#s4">4. Demostración</a></li>
+      <li><a href="#s5">5. Interpretación</a></li>
+      <li><a href="#s6">6. Código optimizado</a></li>
+      <li><a href="#s7">7. Validación</a></li>
+      <li><a href="#s8">8. Comparación</a></li>
+      <li><a href="#s9">9. Conclusiones</a></li>
+      <li><a href="#s10">10. Cómo ejecutar</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+  <section id="s1" class="seccion">
+    <h2>1. Contexto y problema</h2>
+    <p>
+      El sistema controla el acceso a una funcionalidad mediante <strong>Feature Flags</strong>: en vez de
+      activar una función para todos los usuarios a la vez, se decide quién la ve según sus atributos.
+      Se definen tres proposiciones:
+    </p>
+    <ul>
+      <li><strong>A</strong>: el usuario es <em>Administrador</em>.</li>
+      <li><strong>B</strong>: el usuario tiene plan <em>Premium</em>.</li>
+      <li><strong>C</strong>: la funcionalidad está habilitada en <em>Beta global</em>.</li>
+    </ul>
+    <p>
+      El código legacy decide el acceso con tres condiciones (<code>opcion_1</code>, <code>opcion_2</code>,
+      <code>opcion_3</code>) encadenadas con <code>or</code>. El objetivo de este documento es
+      <strong>demostrar formalmente</strong> que esa lógica es equivalente a una expresión mucho más simple,
+      y <strong>verificarlo con código</strong>, no solo con álgebra en papel.
+    </p>
+  </section>
+
+  <section id="s2" class="seccion">
+    <h2>2. Código legacy</h2>
+    <p>
+      Tres caminos posibles dan acceso, todos exigen que la funcionalidad esté en Beta global (<code>C</code>):
+    </p>
+    <ul>
+      <li><code>opcion_1</code>: no es Administrador, pero es Premium (y C).</li>
+      <li><code>opcion_2</code>: es Administrador y Premium (y C).</li>
+      <li><code>opcion_3</code>: es Administrador y no Premium (y C).</li>
+    </ul>
+    <p>En notación lógica, la función de acceso es:</p>
+    <p class="tarjeta" style="font-size:1.05rem; text-align:center;">
+      f(A,B,C) = (¬A ∧ B ∧ C) ∨ (A ∧ B ∧ C) ∨ (A ∧ ¬B ∧ C)
+    </p>
+    <div class="tarjeta">
+      <pre class="bloque-codigo" id="codigo-legacy" data-lang="python">Cargando código fuente…</pre>
+    </div>
+  </section>
+
+  <section id="s3" class="seccion">
+    <h2>3. Tabla de verdad del legacy (en vivo)</h2>
+    <p>
+      Los datos de esta tabla <strong>no están precalculados</strong>: llegan fila por fila desde el backend
+      por <em>Server-Sent Events</em>, ejecutando <code>evaluar_acceso_legacy</code> en tiempo real.
+    </p>
+    <div class="tarjeta">
+      <div class="estado-conexion" data-stream="tabla"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
+      <button data-repetir="tabla">Repetir</button>
+      <table id="tabla-legacy">
+        <thead>
+          <tr><th>#</th><th>A</th><th>B</th><th>C</th><th>opcion_1</th><th>opcion_2</th><th>opcion_3</th><th>legacy</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p id="conclusion-tabla" class="texto-suave"></p>
+    </div>
+  </section>
+
+  <section id="s4" class="seccion">
+    <h2>4. Demostración de la simplificación (en vivo)</h2>
+    <p>
+      Cada fila de la tabla siguiente es un paso algebraico. El backend evalúa la función de cada paso en las
+      8 combinaciones de A, B, C y comprueba que coincide con la función original: así se prueba
+      <strong>computacionalmente</strong> que cada transformación preserva el significado.
+    </p>
+    <div class="tarjeta">
+      <div class="estado-conexion" data-stream="demostracion"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
+      <button data-repetir="demostracion">Repetir</button>
+      <table id="tabla-demostracion">
+        <thead>
+          <tr><th>n</th><th>Expresión</th><th>Ley</th><th>000</th><th>001</th><th>010</th><th>011</th><th>100</th><th>101</th><th>110</th><th>111</th><th>✔</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p id="resultado-demostracion" class="texto-suave"></p>
+    </div>
+    <div class="tarjeta">
+      <h3>Leyes usadas</h3>
+      <ul>
+        <li><strong>Conmutativa:</strong> p∧q ≡ q∧p, p∨q ≡ q∨p.</li>
+        <li><strong>Asociativa:</strong> (p∧q)∧r ≡ p∧(q∧r).</li>
+        <li><strong>Distributiva:</strong> p∧(q∨r) ≡ (p∧q)∨(p∧r); p∨(q∧r) ≡ (p∨q)∧(p∨r).</li>
+        <li><strong>Complemento:</strong> p∨¬p ≡ T; p∧¬p ≡ F.</li>
+        <li><strong>Identidad:</strong> p∧T ≡ p; p∨F ≡ p.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="s5" class="seccion">
+    <h2>5. Interpretación</h2>
+    <p>
+      La forma final <strong>C ∧ (A ∨ B)</strong> dice, en palabras: <em>"tiene acceso quien tiene la
+      funcionalidad habilitada en Beta global (C), y además es Administrador o es Premium (A ∨ B)"</em>.
+      Es exactamente el mismo criterio de negocio que el legacy, expresado sin redundancia: la condición
+      <code>C</code> ya no se repite tres veces, y no hace falta distinguir si el usuario es "Admin y Premium"
+      o "Admin sin Premium", porque ambos casos caen en <code>A ∨ B</code>.
+    </p>
+  </section>
+
+  <section id="s6" class="seccion">
+    <h2>6. Código optimizado</h2>
+    <p>Esta función sale directamente del último paso de la demostración (sección 4):</p>
+    <div class="tarjeta">
+      <pre class="bloque-codigo" id="codigo-optimizado" data-lang="python">Cargando código fuente…</pre>
+    </div>
+  </section>
+
+  <section id="s7" class="seccion">
+    <h2>7. Validación (en vivo)</h2>
+    <p>
+      Se recorren las 8 combinaciones de A, B, C comparando <code>evaluar_acceso_legacy</code> contra
+      <code>evaluar_acceso_optimizado</code>, y al final se ejecuta de verdad el <code>assert</code> de
+      equivalencia.
+    </p>
+    <div class="tarjeta">
+      <div class="estado-conexion" data-stream="validacion"><span class="punto"></span> <span class="texto-estado">sin conectar</span></div>
+      <button data-repetir="validacion">Repetir</button>
+      <div class="barra-progreso"><div id="barra-validacion"></div></div>
+      <p id="contador-validacion">0/8</p>
+      <table id="tabla-validacion">
+        <thead><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>legacy</th><th>optimizado</th><th>coincide</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p id="resultado-assert"></p>
+    </div>
+  </section>
+
+  <section id="s8" class="seccion">
+    <h2>8. Comparación viejo vs nuevo</h2>
+    <div class="tarjeta" id="comparacion-resumen">Cargando comparación…</div>
+    <div class="tarjeta">
+      <h3>Diagrama de compuertas</h3>
+      <p class="texto-suave">Circuito legacy (izquierda, 3 términos OR de ANDs) vs. optimizado (derecha, un AND de un OR).</p>
+      <div style="overflow-x:auto;">
+        <svg class="compuertas" viewBox="0 0 640 220" width="640" height="220" role="img" aria-label="Diagrama de compuertas lógicas: legacy vs optimizado">
+          <text x="10" y="15">LEGACY</text>
+          <text x="10" y="30">A</text><text x="10" y="55">B</text><text x="10" y="80">C</text>
+          <text x="10" y="105">A</text><text x="10" y="130">B</text><text x="10" y="155">C</text>
+          <text x="10" y="180">A</text><text x="10" y="205">B</text>
+          <rect x="60" y="20" width="50" height="45" rx="6"/>
+          <text x="68" y="46">AND</text>
+          <rect x="60" y="95" width="50" height="45" rx="6"/>
+          <text x="68" y="121">AND</text>
+          <rect x="60" y="170" width="50" height="40" rx="6"/>
+          <text x="68" y="194">AND</text>
+          <rect x="150" y="80" width="55" height="55" rx="6"/>
+          <text x="160" y="112">OR x3</text>
+          <line x1="110" y1="42" x2="150" y2="95"/>
+          <line x1="110" y1="117" x2="150" y2="108"/>
+          <line x1="110" y1="190" x2="150" y2="122"/>
+          <line x1="205" y1="108" x2="240" y2="108"/>
+          <text x="245" y="112">acceso</text>
+
+          <text x="380" y="15">OPTIMIZADO</text>
+          <text x="380" y="55">A</text><text x="380" y="80">B</text>
+          <text x="380" y="130">C</text>
+          <rect x="420" y="45" width="50" height="45" rx="6"/>
+          <text x="428" y="71">OR</text>
+          <rect x="500" y="80" width="55" height="45" rx="6"/>
+          <text x="512" y="106">AND</text>
+          <line x1="470" y1="67" x2="500" y2="95"/>
+          <line x1="390" y1="130" x2="500" y2="115"/>
+          <line x1="555" y1="102" x2="600" y2="102"/>
+          <text x="560" y="96">acceso</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="s9" class="seccion">
+    <h2>9. Conclusiones</h2>
+    <ul>
+      <li>Se demostró, ley por ley, que <code>(¬A∧B∧C)∨(A∧B∧C)∨(A∧¬B∧C) ≡ C∧(A∨B)</code>.</li>
+      <li>Cada uno de los 9 pasos se verificó computacionalmente contra las 8 combinaciones posibles.</li>
+      <li>La validación exhaustiva (2³ = 8 combinaciones) confirma la equivalencia con un <code>assert</code> real.</li>
+      <li>El conteo automático de operaciones (vía <code>ast</code>) pasa de 10 a 2 operaciones lógicas: una reducción del 80%.</li>
+      <li>La mejora principal no es velocidad en Python (la diferencia por llamada es mínima), sino legibilidad, menos ramas y menor costo acumulado a escala.</li>
+    </ul>
+  </section>
+
+  <section id="s10" class="seccion">
+    <h2>10. Cómo ejecutar</h2>
+    <p>Con Docker (recomendado):</p>
+    <pre class="bloque-codigo">docker compose up --build
+# abrir http://localhost:8000</pre>
+    <p>Script de consola, sin dependencias:</p>
+    <pre class="bloque-codigo">python3 script_standalone.py</pre>
+  </section>
+
+  <footer class="print-only">
+    <p>Documento generado por el motor de reglas optimizadoras. Impreso desde el navegador.</p>
+  </footer>
+
+  </main>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
